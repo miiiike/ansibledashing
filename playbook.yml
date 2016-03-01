@@ -1,0 +1,64 @@
+---
+- hosts: all
+  sudo: true
+  tasks:
+
+   - name: install node repo to apt
+     shell: curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -
+
+   - name: update apt cache
+     apt: update_cache=yes
+
+   - name: install dependencies 
+     apt: name={{ item }} state=present
+     with_items:
+        - cifs-utils
+        - ruby-full
+        - build-essential
+        - nodejs
+        - ruby-dev
+        - zlib1g-dev
+        - liblzma-dev        
+  # - name: install cifs -utils 
+  #   apt: name=cifs-utils state=present
+  # - name: install ruby-full  a
+  #   apt: name=ruby-full state=present
+  # - name: install build-essential 
+  #   apt: name=build-essential state=present
+  # - name: install nodejs 
+  #   apt: name=nodejs state=present
+  # - name: install extra ruby utils  
+  #   apt: name=ruby-dev state=present
+  # - name: install extra ruby utils  
+  #   apt: name=zlib1g-dev state=present
+  # - name: install extra ruby utils  
+  #   apt: name=liblzma-dev state=present
+
+   - name: install bundler
+     sudo_user: vagrant
+     command: bash -lc "sudo gem install bundler"
+
+   - name: install dashing
+     sudo_user: vagrant
+     command: bash -lc "sudo gem install dashing"
+
+   - name: make new dashing project
+     shell: dashing new ansibledashing 
+     args:
+       chdir: /home/vagrant/dashing
+
+   - name: run bundler
+     shell: bundle 
+     args:
+       chdir: /home/vagrant/dashing/ansibledashing 
+
+   #will stick this back in soon (rebuilding this)
+   # - name: run npm install 
+   #   shell: npm install --no-bin-links
+   #   args:
+   #     chdir: /home/vagrant/dashing/xlsx-json
+
+   # - name: run npm install 
+   #   shell: node read_workbook.js
+   #   args:
+   #     chdir: /home/vagrant/dashing/xlsx-json
