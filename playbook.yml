@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  sudo: true
+  become: yes
   tasks:
 
    - name: install node repo to apt
@@ -35,11 +35,11 @@
   #   apt: name=liblzma-dev state=present
 
    - name: install bundler
-     sudo_user: vagrant
+     become_user: vagrant
      command: bash -lc "sudo gem install bundler"
 
    - name: install dashing
-     sudo_user: vagrant
+     become_user: vagrant
      command: bash -lc "sudo gem install dashing"
 
    - name: make new dashing project
